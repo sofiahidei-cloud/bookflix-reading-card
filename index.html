@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BookFlix Currently Reading</title>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: linear-gradient(135deg, #fff1f5, #f6efe7);
+  color: #2b1d1d;
+  text-align: center;
+  padding: 24px;
+}
+
+h2 {
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  margin-top: 0;
+  color: #7b5e57;
+}
+
+.controls {
+  max-width: 520px;
+  margin: 0 auto 24px;
+  background: #ffffffcc;
+  padding: 20px;
+  border-radius: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+input[type="file"],
+input[type="text"] {
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #e0cfc7;
+  font-size: 15px;
+}
+
+.format-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.format-options label {
+  background: #fff7f2;
+  border: 1px solid #e7cfc3;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+button {
+  margin-top: 18px;
+  padding: 13px 24px;
+  border: none;
+  border-radius: 999px;
+  background: #2b1d1d;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.card {
+  width: 720px;
+  max-width: 100%;
+  margin: auto;
+  padding: 34px;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top left, #ffe1ec, transparent 35%),
+    radial-gradient(circle at bottom right, #ffe4c4, transparent 35%),
+    #fffaf7;
+  box-shadow: 0 18px 45px rgba(94, 54, 43, .18);
+}
+
+.brand {
+  font-size: 18px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  color: #c05a77;
+  text-transform: uppercase;
+}
+
+.card-title {
+  font-size: 44px;
+  margin: 8px 0 24px;
+  line-height: 1.05;
+}
+
+.content {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-frame {
+  width: 250px;
+  height: 370px;
+  border-radius: 22px;
+  background: #f2dfd7;
+  border: 4px solid white;
+  box-shadow: 0 12px 25px rgba(0,0,0,.16);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9d7c70;
+  font-weight: 600;
+}
+
+.cover-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  width: 330px;
+  text-align: left;
+}
+
+.book-title {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.author {
+  font-size: 18px;
+  color: #7b5e57;
+  margin-bottom: 28px;
+}
+
+.reading-format {
+  background: white;
+  padding: 22px;
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.07);
+}
+
+.format-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 21px;
+  margin: 16px 0;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #2b1d1d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.checked {
+  background: #2b1d1d;
+  color: white;
+}
+
+.footer {
+  margin-top: 28px;
+  font-size: 16px;
+  color: #8a6b61;
+}
+
+@media (max-width: 720px) {
+  .card {
+    padding: 24px;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .card-title {
+    font-size: 34px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="controls">
+  <h2>📚 BookFlix Card Generator</h2>
+  <p class="subtitle">Upload your book cover, choose your format, and download your card.</p>
+
+  <input type="file" id="coverInput" accept="image/*" />
+
+  <input type="text" id="titleInput" placeholder="Book title" />
+  <input type="text" id="authorInput" placeholder="Author" />
+
+  <div class="format-options">
+    <label><input type="radio" name="format" value="audio" /> 🎧 Audiobook</label>
+    <label><input type="radio" name="format" value="physical" checked /> 📖 Physical</label>
+    <label><input type="radio" name="format" value="ebook" /> 📱 Ebook</label>
+  </div>
+
+  <button onclick="downloadCard()">Download Card</button>
+</div>
+
+<div id="card" class="card">
+  <div class="brand">BookFlix Club</div>
+  <div class="card-title">Currently<br>Reading</div>
+
+  <div class="content">
+    <div class="cover-frame">
+      <span id="coverPlaceholder">Upload cover</span>
+      <img id="coverPreview" style="display:none;" />
+    </div>
+
+    <div class="info">
+      <div id="bookTitle" class="book-title">Your Book Title</div>
+      <div id="bookAuthor" class="author">Author Name</div>
+
+      <div class="reading-format">
+        <div class="format-row">
+          <div id="audioCircle" class="circle"></div>
+          <span>🎧 Audiobook</span>
+        </div>
+
+        <div class="format-row">
+          <div id="physicalCircle" class="circle checked">✓</div>
+          <span>📖 Physical Book</span>
+        </div>
+
+        <div class="format-row">
+          <div id="ebookCircle" class="circle"></div>
+          <span>📱 Ebook</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Share your current read with BookFlix ✨</div>
+</div>
+
+<script>
+const coverInput = document.getElementById("coverInput");
+const coverPreview = document.getElementById("coverPreview");
+const coverPlaceholder = document.getElementById("coverPlaceholder");
+
+coverInput.addEventListener("change", function(e) {
+  const file = e.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      coverPreview.src = event.target.result;
+      coverPreview.style.display = "block";
+      coverPlaceholder.style.display = "none";
+    };
+
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById("titleInput").addEventListener("input", function() {
+  document.getElementById("bookTitle").textContent = this.value || "Your Book Title";
+});
+
+document.getElementById("authorInput").addEventListener("input", function() {
+  document.getElementById("bookAuthor").textContent = this.value || "Author Name";
+});
+
+document.querySelectorAll('input[name="format"]').forEach(radio => {
+  radio.addEventListener("change", updateFormat);
+});
+
+function updateFormat() {
+  const selected = document.querySelector('input[name="format"]:checked').value;
+
+  ["audio", "physical", "ebook"].forEach(type => {
+    const circle = document.getElementById(type + "Circle");
+    circle.className = "circle";
+    circle.textContent = "";
+  });
+
+  const activeCircle = document.getElementById(selected + "Circle");
+  activeCircle.classList.add("checked");
+  activeCircle.textContent = "✓";
+}
+
+function downloadCard() {
+  html2canvas(document.getElementById("card"), {
+    scale: 2,
+    backgroundColor: null
+  }).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "bookflix-currently-reading.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+}
+</script>
+
+</body>
+</html>
