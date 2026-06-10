@@ -15,8 +15,19 @@
 body {
   margin: 0;
   font-family: "Inter", Arial, sans-serif;
-  background: linear-gradient(135deg, #fff1f5, #f6efe7);
-  color: #2b1d1d;
+
+  background:
+    linear-gradient(
+      rgba(5,5,15,0.35),
+      rgba(5,5,15,0.35)
+    ),
+    url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564");
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  color: white;
   text-align: center;
   padding: 24px;
 }
@@ -82,11 +93,19 @@ button {
   margin: auto;
   padding: 34px;
   border-radius: 34px;
-  background:
-    radial-gradient(circle at top left, #ffe1ec, transparent 35%),
-    radial-gradient(circle at bottom right, #ffe4c4, transparent 35%),
-    #fffaf7;
-  box-shadow: 0 18px 45px rgba(94, 54, 43, .18);
+
+  background: rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  color: white;
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.25),
+    inset 0 0 1px rgba(255,255,255,0.4);
 }
 
 .brand {
